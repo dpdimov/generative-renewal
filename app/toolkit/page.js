@@ -279,6 +279,7 @@ async function callClaude(messages, systemPrompt) {
 function DiagnosticTool({ onComplete }) {
   const [answers, setAnswers] = useState({});
   const [showResults, setShowResults] = useState(false);
+  const savedRef = useRef(false);
 
   const allQ = Object.entries(CAPABILITIES).flatMap(([k, v]) => v.diagnosticQuestions.map(q => ({ ...q, capability: k })));
   const answered = Object.keys(answers).length;
@@ -302,6 +303,18 @@ function DiagnosticTool({ onComplete }) {
     if (s >= 2.2) return { lvl: "Emerging", d: "Some foundation exists but this area would benefit from intentional development." };
     return { lvl: "Nascent", d: "This is an area of significant opportunity. Even small steps can create meaningful movement." };
   };
+
+  useEffect(() => {
+    if (showResults && !savedRef.current) {
+      savedRef.current = true;
+      const sc = getScores();
+      fetch("/api/saveResults", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ scores: sc }),
+      }).catch(() => {}); // fire-and-forget
+    }
+  }, [showResults]);
 
   if (showResults) {
     const sc = getScores(), ord = getOrder(sc);
