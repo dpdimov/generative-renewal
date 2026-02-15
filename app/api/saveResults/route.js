@@ -4,7 +4,7 @@ import { saveDiagnosticResult } from "../../../lib/database";
 export async function POST(request) {
   try {
     const body = await request.json();
-    const { scores } = body;
+    const { scores, groupCode } = body;
 
     if (!scores || typeof scores.connection !== "number") {
       return NextResponse.json({ error: "Invalid scores" }, { status: 400 });
@@ -20,6 +20,7 @@ export async function POST(request) {
       valuesScore: scores.values,
       imaginationScore: scores.imagination,
       coherenceScore: scores.coherence,
+      groupCode: groupCode || null,
       userAgent,
       ipAddress,
     });

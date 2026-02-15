@@ -7,21 +7,15 @@ CREATE TABLE diagnostic_results (
   values_score DECIMAL(3, 2) NOT NULL,
   imagination_score DECIMAL(3, 2) NOT NULL,
   coherence_score DECIMAL(3, 2) NOT NULL,
+  group_code VARCHAR(50),
   user_agent TEXT,
   ip_address INET,
   completed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE INDEX idx_completed_at ON diagnostic_results(completed_at);
+CREATE INDEX idx_group_code ON diagnostic_results(group_code);
 
--- Analytics view: aggregate patterns
-CREATE VIEW diagnostic_analytics AS
-SELECT
-  COUNT(*) as total_assessments,
-  AVG(connection_score) as avg_connection,
-  AVG(values_score) as avg_values,
-  AVG(imagination_score) as avg_imagination,
-  AVG(coherence_score) as avg_coherence,
-  MIN(completed_at) as first_assessment,
-  MAX(completed_at) as last_assessment
-FROM diagnostic_results;
+-- To add group_code to an existing table:
+-- ALTER TABLE diagnostic_results ADD COLUMN group_code VARCHAR(50);
+-- CREATE INDEX idx_group_code ON diagnostic_results(group_code);

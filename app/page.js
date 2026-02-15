@@ -109,7 +109,7 @@ export default function HubPage() {
           {TOOLS.map((tool) => (
             <Link
               key={tool.id}
-              href={`/toolkit?tool=${tool.id}`}
+              href={`/toolkit/${tool.id}`}
               style={{ textDecoration: "none", color: "inherit" }}
             >
               <div className="hub-card" style={{
@@ -181,6 +181,13 @@ export default function HubPage() {
             About the Diamond Model
           </button>
         </div>
+      </div>
+
+      {/* Footer */}
+      <div style={{ textAlign: "center", paddingBottom: "32px" }}>
+        <Link href="/admin" style={{ fontSize: "12px", color: "#C0B9AE", textDecoration: "none" }}>
+          Admin
+        </Link>
       </div>
 
       {/* About panel overlay */}
